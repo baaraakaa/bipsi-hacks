@@ -28,74 +28,74 @@ HOW TO USE - BASIC:
 1. Import this plugin into your game.
 2. Create a character event near the avatar.  Remove it's "say" field.
 3. Add a javascript field (to the event of step 2) named "after".  Set it to the following code:
-  SAY_CHOICES("What to ask?", [
-	["How are you?", () => SAY("I am fine.")],
-	["Where's the bipsi?", () => SAY("It's right here.  Enjoy!")],
-  ]);
+SAY_CHOICES("What to ask?", [
+["How are you?", () => SAY("I am fine.")],
+["Where's the bipsi?", () => SAY("It's right here.  Enjoy!")],
+]);
 4. Playtest the game and bump the character event of step 2.  Note that a series of choices is
-   presented that matches the code of step 3.  Try each choice.
+presented that matches the code of step 3.  Try each choice.
 5. Here are some notes on the code of step 5:
-  - The first parameter defines the text that is shown above the choices.  Try setting it to null or
-	an empty string.
-  - The second parameter is an array of choices.  Up to 4 choices are readily supported. More are
-	possible by modifying the plugin's "choice-keys" parameter, though I suggest not overdoing this.
-  - Each choice is an array of two values.  The first value is a string for what to show in the
-	dialogue ui for this choice.  The second value is the choice's result-object.  It represents
-	what to do when the choice is selected.  The code of step 3 provides a function for the result-
-	object of each choice.  When a choice is selected, its function is run.
+- The first parameter defines the text that is shown above the choices.  Try setting it to null or
+an empty string.
+- The second parameter is an array of choices.  Up to 4 choices are readily supported. More are
+possible by modifying the plugin's "choice-keys" parameter, though I suggest not overdoing this.
+- Each choice is an array of two values.  The first value is a string for what to show in the
+dialogue ui for this choice.  The second value is the choice's result-object.  It represents
+what to do when the choice is selected.  The code of step 3 provides a function for the result-
+object of each choice.  When a choice is selected, its function is run.
 
 
 HOW TO USE - NON-FUNCTION RESULT-OBJECTS:
 1. Import this plugin into your game.
 2. Add a message event to a corner of the room.  Remove it's "one-time" field.  Set it's "say" field
-   to "It's further than you think.".
+to "It's further than you think.".
 3. Create a character event near the avatar.  Remove it's "say" field.
 4. Add a location field (to the event of step 3) called "remote-location".  Set it to the location
-   of the event from step 2.
+of the event from step 2.
 5. Add a javascript field (to the event of step 3) called "after".  Set it to the following code:
-  SAY_CHOICES("What to ask?", [
-	["How are you?", "I am fine."],
-	["Where's the bipsi?", FIELD(EVENT,"remote-location","location")],
-  ]);
+SAY_CHOICES("What to ask?", [
+["How are you?", "I am fine."],
+["Where's the bipsi?", FIELD(EVENT,"remote-location","location")],
+]);
 6. Playtest the game and bump the character event of step 3.  Note that a series of choices is
-   presented that matches the code of step 5.  Try each choice.
+presented that matches the code of step 5.  Try each choice.
 7. Here are some notes on the code of step 5:
-  - The result-objects of choices don't have to be functions.  The first choice (of step 5's code)
-	has a string for a result-object.  When a choice is selected that has a string result-object,
-	"dialogue-choices" displays that string in a dialogue ui by default.
-  - The second choice (of step 5's code) is a location.  When a choice is selected that has a
-	location result-object, the "dialogue-choices" plugin triggers a touch of whatever event is at that
-	location.
+- The result-objects of choices don't have to be functions.  The first choice (of step 5's code)
+has a string for a result-object.  When a choice is selected that has a string result-object,
+"dialogue-choices" displays that string in a dialogue ui by default.
+- The second choice (of step 5's code) is a location.  When a choice is selected that has a
+location result-object, the "dialogue-choices" plugin triggers a touch of whatever event is at that
+location.
 
 
 HOW TO USE - CUSTOM RESULT-OBJECTS:
 1. Import this plugin into your game.
 2. Create a character event.  Remove it's "say" field.
 3. Add a javascript type (to the event of step 2) named "after".  Set it to the following code:
-  SAY_CHOICES("Choose a formula...", [
-	["2 * 2", 4],
-	["8 + 1", 9],
-	["3^2", 9],
-  ]);
+SAY_CHOICES("Choose a formula...", [
+["2 * 2", 4],
+["8 + 1", 9],
+["3^2", 9],
+]);
 4. Playtest the game and bump the character event of step 2.  Note that nothing happens when you
-   select any of the choices.  This is because all of the choices have a result-type of "number",
-   and "dialogue-choices" doesn't know what to do with that.
+select any of the choices.  This is because all of the choices have a result-type of "number",
+and "dialogue-choices" doesn't know what to do with that.
 5. BONUS - Open the browser's console.  Note that a warning is added each time you select a choice.
 6. Select the "dialogue-choices" plugin event.  Modify the field "custom-choice-results" by setting
-   it to the following code:
-  if (typeof CHOICE_RESULT === "number") {
-	await SAY("" + CHOICE_RESULT);
-	return true;
-  }
+it to the following code:
+if (typeof CHOICE_RESULT === "number") {
+await SAY("" + CHOICE_RESULT);
+return true;
+}
 7. Playtest the game and bump into the character event of step 2.  Note that, when you select a
-   choice, it's result-object number is displayed in a dialogue ui.
+choice, it's result-object number is displayed in a dialogue ui.
 8. Here are some notes on the code of step 6:
-   - The plugin's "custom-choice-results" parameter allows you to add custom reactions to new
-	 result-object types.  In the example, we added a reaction when the result-object was a number.
-   - If "custom-choice-results" DOES handle a result-object, then it should return true.  This
-	 ends the result-handling logic, so that no further checks are done.
-   - If necessary, you can add multiple javascript fields named "custom-choice-results" to the
-	 "dialogue-choices" event.  If this is done, each object-result is passed to every field in order.
+- The plugin's "custom-choice-results" parameter allows you to add custom reactions to new
+	result-object types.  In the example, we added a reaction when the result-object was a number.
+- If "custom-choice-results" DOES handle a result-object, then it should return true.  This
+	ends the result-handling logic, so that no further checks are done.
+- If necessary, you can add multiple javascript fields named "custom-choice-results" to the
+	"dialogue-choices" event.  If this is done, each object-result is passed to every field in order.
 
 
 // An array of which keys trigger which choices.  The "char" property defines what is displayed for
@@ -124,166 +124,166 @@ HOW TO USE - CUSTOM RESULT-OBJECTS:
 //!CONFIG dialogue-character-width (text) "6"
 */
 (function () {
-	'use strict';
+'use strict';
 
 
 
-	const CHOICE_KEYS = FIELD(CONFIG, 'choice-keys', 'json');
-	const CUSTOM_CHOICE_RESULT_HANDLERS = FIELDS(CONFIG, 'custom-choice-results', 'javascript');
-	const PREAMBLE_SEPARATION_COUNT = parseInt(FIELD(CONFIG, 'preamble-separation-count', 'text')?.trim(), 10) ?? 1;
-	const DIALOGUE_LINE_WIDTH = parseInt(FIELD(CONFIG, 'dialogue-line-width', 'text')?.trim(), 10) ?? 192;
-	const DIALOGUE_CHARACTER_WIDTH = parseInt(FIELD(CONFIG, 'dialogue-character-width', 'text')?.trim(), 10) ?? 6;
+const CHOICE_KEYS = FIELD(CONFIG, 'choice-keys', 'json');
+const CUSTOM_CHOICE_RESULT_HANDLERS = FIELDS(CONFIG, 'custom-choice-results', 'javascript');
+const PREAMBLE_SEPARATION_COUNT = parseInt(FIELD(CONFIG, 'preamble-separation-count', 'text')?.trim(), 10) ?? 1;
+const DIALOGUE_LINE_WIDTH = parseInt(FIELD(CONFIG, 'dialogue-line-width', 'text')?.trim(), 10) ?? 192;
+const DIALOGUE_CHARACTER_WIDTH = parseInt(FIELD(CONFIG, 'dialogue-character-width', 'text')?.trim(), 10) ?? 6;
 
-	// Method to trigger a choices-dialogue
-	BipsiPlayback.prototype.sayChoices = function sayChoices(preamble, choices, sayStyle = undefined, extraLineCount = 0, event = undefined) {
-		if (choices.length === 0) return undefined;
+// Method to trigger a choices-dialogue
+BipsiPlayback.prototype.sayChoices = function sayChoices(preamble, choices, sayStyle = undefined, extraLineCount = 0, event = undefined) {
+	if (choices.length === 0) return undefined;
 
-		const preambleLineCount = preamble ? this.calculateLineCountOfDialogueText(preamble) + PREAMBLE_SEPARATION_COUNT : 0;
-		const choiceCount = Math.min(choices.length, CHOICE_KEYS.length);
-		const choiceSayStyle = { lines: preambleLineCount + choiceCount + extraLineCount, glyphRevealDelay: 0 };
-		sayStyle = sayStyle ? Object.assign(sayStyle, choiceSayStyle) : choiceSayStyle;
+	const preambleLineCount = preamble ? this.calculateLineCountOfDialogueText(preamble) + PREAMBLE_SEPARATION_COUNT : 0;
+	const choiceCount = Math.min(choices.length, CHOICE_KEYS.length);
+	const choiceSayStyle = { lines: preambleLineCount + choiceCount + extraLineCount, glyphRevealDelay: 0 };
+	sayStyle = sayStyle ? Object.assign(sayStyle, choiceSayStyle) : choiceSayStyle;
 
-		let dialogueText = preamble ? `${preamble}\n${'\n'.repeat(PREAMBLE_SEPARATION_COUNT)}` : '';
-		for (let i = 0; i < choiceCount; i++) {
-			const separatorText = i > 0 ? '\n' : '';
-			dialogueText += `${separatorText}${CHOICE_KEYS[i].char} ${choices[i][0]}`;
-		}
-		// Wait for the next frame to set choiceResultOptions.  This prevents any prior keystroke from triggering a choice.
-		setTimeout(() => {
-			this.choiceResultOptions = choices.map(choice => choice[1]);
-		}, 0);
-		this.choicesSourceEvent = event; // This is used in a few places throughout the plugin
-		return this.say(dialogueText, sayStyle);
-	};
-
-	// Simpler method for use within a javascript field
-	SCRIPTING_FUNCTIONS.SAY_CHOICES = async function SAY_CHOICES(preamble, choices, sayStyle = undefined, extraLineCount = 0, event = this.EVENT) {
-		return this.PLAYBACK.sayChoices(preamble, choices, sayStyle, extraLineCount, event);
-	};
-
-	// Get how many lines the given text will display as in the dialogue system.
-	BipsiPlayback.prototype.calculateLineCountOfDialogueText = function calculateLineCountOfDialogueText(text) {
-		if (!text?.trim()) return 0;
-		const lines = text.split('\n');
-		let result = 0;
-		lines.forEach(line => {
-			result += Math.floor(line.length / (DIALOGUE_LINE_WIDTH / DIALOGUE_CHARACTER_WIDTH)) + 1;
-		});
-		return result;
-	};
-
-	// Given an object representing a choice-result, this function determines what to do with it.
-	BipsiPlayback.prototype.runChoice = async function runChoice(choiceResult) {
-		// Start by running custom choice-result handlers.
-		if (CUSTOM_CHOICE_RESULT_HANDLERS.length) {
-			window.CHOICE_RESULT = choiceResult;
-			for (let i = 0; i < CUSTOM_CHOICE_RESULT_HANDLERS.length; i++) {
-				const handler = CUSTOM_CHOICE_RESULT_HANDLERS[i];
-				// eslint-disable-next-line no-await-in-loop
-				if (await this.runJS(this.choicesSourceEvent, handler)) {
-					// If a custom choice-result handler handled the result (i.e. returned truthy) then we're done.
-					delete window.CHOICE_RESULT;
-					return;
-				}
-			}
-			delete window.CHOICE_RESULT;
-		}
-		// If none of the custom choice-result handlers worked, run through the native handlers.
-		switch (typeof choiceResult) {
-			case 'function':
-				choiceResult();
-				break;
-			case 'string':
-				this.say(choiceResult);
-				break;
-			case 'object':
-				// Location object
-				if (choiceResult.room && choiceResult.position) {
-					const event = window.getEventAtLocation(this.data, choiceResult);
-					if (event) {
-						this.touch(event);
-					}
-				}
-				// javascript field
-				else if (choiceResult.key && choiceResult.data && choiceResult.type === 'javascript') {
-					this.runJS(this.choicesSourceEvent, choiceResult.data);
-				}
-				// location field
-				else if (choiceResult.key && choiceResult.data && choiceResult.type === 'location') {
-					this.runChoice(choiceResult.data);
-				}
-				break;
-			default: {
-				console.warn('A choice with an unhandled result type produced no effect:', choiceResult);
-			}
-		}
-	};
-
-	BipsiPlayback.prototype.handleKeydownForChoices = function handleKeydownForChoices(keyEvent) {
-		if (keyEvent.repeat) return;
-		if (!this.choiceResultOptions) return;
-		for (let i = 0; i < this.choiceResultOptions.length; i++) {
-			if (CHOICE_KEYS[i].codes.includes(keyEvent.key)) {
-				keyEvent.stopPropagation();
-				keyEvent.preventDefault();
-				const choiceResult = this.choiceResultOptions[i];
-				this.choiceResultOptions = null;
-				this.proceed();
-				this.runChoice(choiceResult);
-				break;
-			}
-		}
-	};
-
-	BipsiPlayback.prototype.handleSwipeInputForChoices = function handleSwipeInputForChoices(idx) {
-		console.log("handler")
-		if (!this.choiceResultOptions) return
-		// gotta fiddle with idx, keys in different order
-		// this hack is udlr vs bipsi is rdlu
-		const choiceResult = this.choiceResultOptions[[3,1,2,0][idx]]
-		console.log(choiceResult)
-		this.choiceResultOptions = null;
-		this.proceed()
-		this.runChoice(choiceResult)
+	let dialogueText = preamble ? `${preamble}\n${'\n'.repeat(PREAMBLE_SEPARATION_COUNT)}` : '';
+	for (let i = 0; i < choiceCount; i++) {
+		const separatorText = i > 0 ? '\n' : '';
+		dialogueText += `${separatorText}${CHOICE_KEYS[i].char} ${choices[i][0]}`;
 	}
+	// Wait for the next frame to set choiceResultOptions.  This prevents any prior keystroke from triggering a choice.
+	setTimeout(() => {
+		this.choiceResultOptions = choices.map(choice => choice[1]);
+	}, 0);
+	this.choicesSourceEvent = event; // This is used in a few places throughout the plugin
+	return this.say(dialogueText, sayStyle);
+};
 
-	// Add listener to window, instead of document, to allow overriding bipsi's original 'keydown' listener.
-	window.addEventListener('keydown', evt => window.PLAYBACK.handleKeydownForChoices(evt), { capture: true });
-	// same as above but for 'pointerdown' 
-	window.addEventListener("pointerdown", (event) => {
-		const playCanvas = /** @type {HTMLCanvasElement} */ (ONE("#player-canvas"));
-		const threshold = playCanvas.getBoundingClientRect().width / ROOM_SIZE * 2;
+// Simpler method for use within a javascript field
+SCRIPTING_FUNCTIONS.SAY_CHOICES = async function SAY_CHOICES(preamble, choices, sayStyle = undefined, extraLineCount = 0, event = this.EVENT) {
+	return this.PLAYBACK.sayChoices(preamble, choices, sayStyle, extraLineCount, event);
+};
 
-		const drag = ui.drag(event);
-		let [x0, y0] = [drag.downEvent.clientX, drag.downEvent.clientY];
-		window.PLAYBACK.proceed();
-		let done = false
-		drag.addEventListener("move", () => {
-			if(done){
-				return; 
-			}
-			const [x1, y1] = [drag.lastEvent.clientX, drag.lastEvent.clientY];
-			const [dx, dy] = [x1 - x0, y1 - y0];
-
-			const dist = Math.max(Math.abs(dx), Math.abs(dy));
-			const angle = Math.atan2(dy, dx) + Math.PI * 2;
-			const turns = Math.round(angle / (Math.PI * .5)) % 4;
-
-			if (dist >= threshold) {
-				console.log("THRESH")
-				console.log(turns)
-				window.PLAYBACK.handleSwipeInputForChoices(turns);
-				done = true
-				// x0 = x1;
-				// y0 = y1;
-			}
-		});
-	}, { capture: true })
-
-	// Block dialogue proceeding from keystrokes if there are dialogue choices to choose from
-	wrap.splice(BipsiPlayback.prototype, 'proceed', function proceed(original) {
-		if (this.choiceResultOptions) return null;
-		return original.call(this);
+// Get how many lines the given text will display as in the dialogue system.
+BipsiPlayback.prototype.calculateLineCountOfDialogueText = function calculateLineCountOfDialogueText(text) {
+	if (!text?.trim()) return 0;
+	const lines = text.split('\n');
+	let result = 0;
+	lines.forEach(line => {
+		result += Math.floor(line.length / (DIALOGUE_LINE_WIDTH / DIALOGUE_CHARACTER_WIDTH)) + 1;
 	});
+	return result;
+};
+
+// Given an object representing a choice-result, this function determines what to do with it.
+BipsiPlayback.prototype.runChoice = async function runChoice(choiceResult) {
+	// Start by running custom choice-result handlers.
+	if (CUSTOM_CHOICE_RESULT_HANDLERS.length) {
+		window.CHOICE_RESULT = choiceResult;
+		for (let i = 0; i < CUSTOM_CHOICE_RESULT_HANDLERS.length; i++) {
+			const handler = CUSTOM_CHOICE_RESULT_HANDLERS[i];
+			// eslint-disable-next-line no-await-in-loop
+			if (await this.runJS(this.choicesSourceEvent, handler)) {
+				// If a custom choice-result handler handled the result (i.e. returned truthy) then we're done.
+				delete window.CHOICE_RESULT;
+				return;
+			}
+		}
+		delete window.CHOICE_RESULT;
+	}
+	// If none of the custom choice-result handlers worked, run through the native handlers.
+	switch (typeof choiceResult) {
+		case 'function':
+			choiceResult();
+			break;
+		case 'string':
+			this.say(choiceResult);
+			break;
+		case 'object':
+			// Location object
+			if (choiceResult.room && choiceResult.position) {
+				const event = window.getEventAtLocation(this.data, choiceResult);
+				if (event) {
+					this.touch(event);
+				}
+			}
+			// javascript field
+			else if (choiceResult.key && choiceResult.data && choiceResult.type === 'javascript') {
+				this.runJS(this.choicesSourceEvent, choiceResult.data);
+			}
+			// location field
+			else if (choiceResult.key && choiceResult.data && choiceResult.type === 'location') {
+				this.runChoice(choiceResult.data);
+			}
+			break;
+		default: {
+			console.warn('A choice with an unhandled result type produced no effect:', choiceResult);
+		}
+	}
+};
+
+BipsiPlayback.prototype.handleKeydownForChoices = function handleKeydownForChoices(keyEvent) {
+	if (keyEvent.repeat) return;
+	if (!this.choiceResultOptions) return;
+	for (let i = 0; i < this.choiceResultOptions.length; i++) {
+		if (CHOICE_KEYS[i].codes.includes(keyEvent.key)) {
+			keyEvent.stopPropagation();
+			keyEvent.preventDefault();
+			const choiceResult = this.choiceResultOptions[i];
+			this.choiceResultOptions = null;
+			this.proceed();
+			this.runChoice(choiceResult);
+			break;
+		}
+	}
+};
+
+BipsiPlayback.prototype.handleSwipeInputForChoices = function handleSwipeInputForChoices(idx) {
+	console.log("handler")
+	if (!this.choiceResultOptions) return
+	// gotta fiddle with idx, keys in different order
+	// this hack is udlr vs bipsi is rdlu
+	const choiceResult = this.choiceResultOptions[[3,1,2,0][idx]]
+	console.log(choiceResult)
+	this.choiceResultOptions = null;
+	this.proceed()
+	this.runChoice(choiceResult)
+}
+
+// Add listener to window, instead of document, to allow overriding bipsi's original 'keydown' listener.
+window.addEventListener('keydown', evt => window.PLAYBACK.handleKeydownForChoices(evt), { capture: true });
+// same as above but for 'pointerdown' 
+window.addEventListener("pointerdown", (event) => {
+	const playCanvas = /** @type {HTMLCanvasElement} */ (ONE("#player-canvas"));
+	const threshold = playCanvas.getBoundingClientRect().width / ROOM_SIZE * 2;
+
+	const drag = ui.drag(event);
+	let [x0, y0] = [drag.downEvent.clientX, drag.downEvent.clientY];
+	window.PLAYBACK.proceed();
+	let done = false
+	drag.addEventListener("move", () => {
+		if(done){
+			return; 
+		}
+		const [x1, y1] = [drag.lastEvent.clientX, drag.lastEvent.clientY];
+		const [dx, dy] = [x1 - x0, y1 - y0];
+
+		const dist = Math.max(Math.abs(dx), Math.abs(dy));
+		const angle = Math.atan2(dy, dx) + Math.PI * 2;
+		const turns = Math.round(angle / (Math.PI * .5)) % 4;
+
+		if (dist >= threshold) {
+			console.log("THRESH")
+			console.log(turns)
+			window.PLAYBACK.handleSwipeInputForChoices(turns);
+			done = true
+			// x0 = x1;
+			// y0 = y1;
+		}
+	});
+}, { capture: true })
+
+// Block dialogue proceeding from keystrokes if there are dialogue choices to choose from
+wrap.splice(BipsiPlayback.prototype, 'proceed', function proceed(original) {
+	if (this.choiceResultOptions) return null;
+	return original.call(this);
+});
 
 })();
