@@ -26,10 +26,10 @@ HOW TO USE - BASIC:
 1. Import this plugin into your game.
 2. Create a character event near the avatar.  Remove it's "say" field.
 3. Add a javascript field (to the event of step 2) named "after".  Set it to the following code:
-  SAY_CHOICES("What to ask?", [
-	["How are you?", () => SAY("I am fine.")],
-	["Where's the bipsi?", () => SAY("It's right here.  Enjoy!")],
-  ]);
+SAY_CHOICES("What to ask?", [
+["How are you?", () => SAY("I am fine.")],
+["Where's the bipsi?", () => SAY("It's right here.  Enjoy!")],
+]);
 4. Playtest the game and bump the character event of step 2.  Note that a series of choices is
    presented that matches the code of step 3.  Try each choice.
 5. Here are some notes on the code of step 5:
